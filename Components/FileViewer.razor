@@ -1,0 +1,50 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="mt-8 flex ">
+  @if (this.UploadedFiles.Count > 0) 
+  {
+      @RenderNotEmpty(UploadedFiles)
+  }
+  else
+  {
+      @RenderEmpty
+  }
+</div>
+
+@code {
+  private class UpFile {
+    private IBrowserFile file;
+    public string FileName {get; set;}
+    
+    public UpFile(IBrowserFile uploadFile)
+    {
+        file = uploadFile;
+        FileName = file.Name;
+    }
+  }
+
+  List<UpFile> UploadedFiles = new List<UpFile>();    
+  
+  private RenderFragment<List<UpFile>> RenderNotEmpty = files => __builder =>
+  {
+    <div class="btn-group">
+    @for (int i=0; i < files.Count; i++)
+    {
+      <input type="radio" name="files" value="@i" data-title="@files[i].FileName" class="btn" />
+    }
+    </div>
+  };
+
+  readonly RenderFragment RenderEmpty = __builder =>
+  {
+    <ul class="menu menu-horizontal bg-base-100 rounded-box">
+      <li><a>Files not uploaded</a></li>
+    </ul>
+  };
+
+  public void AddUploadFile(IReadOnlyList<IBrowserFile> files){
+    foreach (var file in files)
+      UploadedFiles.Add(new UpFile(file));
+    this.StateHasChanged();
+  }
+}

@@ -3,3 +3,18 @@
 <PageTitle>Index</PageTitle>
 
 <h1>Blazor Server File Upload</h1>
+<h3>@Message</h3>
+<InputFile OnChange="OnInputFileChange" multiple />
+<IconSize.Components.FileViewer @ref="fileView"/>
+
+@code{
+    string Message = "No uploaded files";
+    IconSize.Components.FileViewer fileView;
+
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        fileView.AddUploadFile(e.GetMultipleFiles());
+        Message = $"Files uploaded";
+        this.StateHasChanged();
+    }
+}
