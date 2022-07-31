@@ -2,10 +2,14 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Blazor Server File Upload</h1>
-<h3>@Message</h3>
-<InputFile OnChange="OnInputFileChange" multiple />
-<IconSize.Components.FileViewer @ref="fileView"/>
+<div data-theme="pastel">
+    <h1>Blazor Server File Upload</h1>
+    <h3>@Message</h3>
+    <InputFile OnChange="OnInputFileChange" multiple />
+    <IconSize.Components.IconSelecter />
+    <IconSize.Components.FileViewer @ref="fileView"/>
+</div>
+
 
 @code{
     string Message = "No uploaded files";

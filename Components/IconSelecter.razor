@@ -1,0 +1,42 @@
+
+<div class="p-10">
+    <div class="flex flex-col w-full border-opacity-50">
+        App icon Generator
+        Drag or select an app icon image (1024x1024) to generate different app icon sizes for all platforms
+        <div class="divider">iOS and macOS</div>
+        <div class="grid h-80 card bg-base-300 rounded-box place-items-center">
+            <label class="label">
+                <input type="checkbox" class="toggle" @onchange="@((args) => SelectPlatform(0, args))" checked />
+                iPhone - 11 different sizes and files
+            </label>
+            <label class="label">
+                <input type="checkbox" class="toggle" @onchange="@((args) => SelectPlatform(1, args))" checked />
+                iPad - 13 different sizes and files
+            </label>
+            <label class="label">
+                <input type="checkbox" class="toggle" @onchange="@((args) => SelectPlatform(2, args))" checked />
+                watchOS - 8 different sizes and files
+            </label>
+            <label class="label">
+                <input type="checkbox" class="toggle" @onchange="@((args) => SelectPlatform(3, args))" checked />
+                macOS - 11 different sizes and files
+            </label>
+        </div>
+        <div class="divider">Android</div>
+        <div class="grid h-20 card bg-base-300 rounded-box place-items-center">
+            <label class="label">
+                <input type="checkbox" class="toggle" @onchange="@((args) => SelectPlatform(4, args))" checked />
+                Android - 4 different sizes and files
+            </label>
+        </div>     
+    </div>
+</div>
+
+
+@code {
+    List<bool> selectIcons = new List<bool>{true, true, true, true, true};
+    private void SelectPlatform(int platformId, ChangeEventArgs args)
+    {   
+        selectIcons[platformId] = Convert.ToBoolean(args.Value);
+    }
+}
