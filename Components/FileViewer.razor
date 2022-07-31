@@ -84,4 +84,16 @@
     selectedFiles.RemoveAt(n);
     this.StateHasChanged();
   }
+
+  public int GetSelected()
+  {
+    for (var i=0; i < selectedFiles.Count; i++)
+    {
+      if (selectedFiles[i] == 1)
+      {
+        return i;
+      }
+    }
+    return -1;
+  }
 }
