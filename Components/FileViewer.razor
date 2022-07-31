@@ -1,0 +1,99 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="flex items-center justify-center">
+  @if (this.uploadedFiles.Count > 0) 
+  {
+    <div class="btn-group">
+      @for (int i=0; i < this.uploadedFiles.Count; i++)
+      {
+        var j = i;
+        <button type="radio" name="files" class="btn gap-2" onclick="@(() => SelectFile(j))">
+          <div class="badge badge-accent" onclick="@(() => DeleteFile(j))">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-4 h-4 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </div>
+          @* <span class="indicator-item indicator-start badge badge-secondary">Exit</span> *@
+          @this.uploadedFiles[j].FileName
+        </button>
+      }
+    </div>
+  }
+  else
+  {
+    @RenderEmpty
+  }
+</div>
+
+@code {
+  private class UpFile {
+    private IBrowserFile file;
+    public string FileName {get; set;}
+    
+    public UpFile(IBrowserFile uploadFile)
+    {
+        file = uploadFile;
+        FileName = file.Name;
+    }
+  }
+
+  List<UpFile> uploadedFiles = new List<UpFile>();  
+  List<int> selectedFiles = new List<int>();
+  
+  private void SelectFile(int n)
+  {
+    for (var i=0; i < selectedFiles.Count; i++)
+    {
+      selectedFiles[i] = 0;
+    }
+    if (selectedFiles.Count > n)
+    {
+      selectedFiles[n] = 1;
+    }
+    @* selectedFiles.ForEach(i => Console.Write("{0}\t", i));
+    Console.WriteLine("end"); *@
+  }
+
+  readonly RenderFragment RenderEmpty = __builder =>
+  {
+    <ul class="menu menu-horizontal bg-base-100 rounded-box">
+      <li><a>Files not uploaded</a></li>
+    </ul>
+  };
+
+  public void AddUploadFile(IReadOnlyList<IBrowserFile> files){
+    foreach (var file in files)
+    {
+      var checkName = true;
+      foreach (var currentFile in uploadedFiles)
+      {
+        if (currentFile.FileName == file.Name)
+        {
+          checkName = false;
+        }
+      }
+      if (checkName)
+      {
+        uploadedFiles.Add(new UpFile(file));
+        selectedFiles.Add(0);
+      }    
+    }
+    this.StateHasChanged();
+  }
+  private void DeleteFile(int n)
+  {
+    uploadedFiles.RemoveAt(n);
+    selectedFiles.RemoveAt(n);
+    this.StateHasChanged();
+  }
+
+  public int GetSelected()
+  {
+    for (var i=0; i < selectedFiles.Count; i++)
+    {
+      if (selectedFiles[i] == 1)
+      {
+        return i;
+      }
+    }
+    return -1;
+  }
+}
