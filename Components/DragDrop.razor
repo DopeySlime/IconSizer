@@ -1,0 +1,17 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+<div class="w-full pb-2">
+    <label class="flex justify-center h-80 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+        <span class="flex items-center space-x-2">
+            <span class="font-medium text-gray-600">
+                Drag file to change size 
+            </span>
+        </span>
+        <InputFile OnChange="InputEvent" class="hidden"/>
+    </label>
+</div>
+
+@code {
+    [Parameter]
+    public Action<InputFileChangeEventArgs> InputEvent { get; set; }
+}
