@@ -7,7 +7,7 @@
       @for (int i=0; i < this.uploadedFiles.Count; i++)
       {
         var j = i;
-        <button type="radio" name="files" class="btn gap-2" onclick="@(() => SelectFile(j))">
+        <button type="radio" name="files" class="btn @(Convert.ToBoolean(selectedFiles[j]) ? selectedColor : noneSelectedColor) gap-2" onclick="@(() => SelectFile(j))">
           <div class="badge badge-accent" onclick="@(() => DeleteFile(j))">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-4 h-4 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </div>
@@ -24,6 +24,8 @@
 </div>
 
 @code {
+  string selectedColor = "btn-primary";
+  string noneSelectedColor = "btn-secondary";
   private class UpFile {
     private IBrowserFile file;
     public string FileName {get; set;}
@@ -50,6 +52,7 @@
     }
     @* selectedFiles.ForEach(i => Console.Write("{0}\t", i));
     Console.WriteLine("end"); *@
+    this.StateHasChanged();
   }
 
   readonly RenderFragment RenderEmpty = __builder =>

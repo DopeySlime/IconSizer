@@ -1,11 +1,21 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>IconCreator</PageTitle>
 
-<h1>Blazor Server File Upload</h1>
-<h3>@Message</h3>
-<InputFile OnChange="OnInputFileChange" multiple />
-<IconSize.Components.FileViewer @ref="fileView"/>
+<h3 class="flex justify-center pb-4">Blazor Server File Upload</h3>
+
+<div data-theme="pastel" class="flex h-screen">
+    <div class="flex justify-center px-60 grid grid-cols-2 gap-2 ">
+        <div>
+            <IconSize.Components.DragDrop InputEvent="OnInputFileChange"/>
+            <IconSize.Components.FileViewer @ref="fileView"/>
+        </div>
+        <div>
+            <IconSize.Components.IconSelecter />
+        </div>
+    </div>
+</div>
+
 
 @code{
     string Message = "No uploaded files";
