@@ -1,13 +1,13 @@
 @using Microsoft.AspNetCore.Components.Forms
 
-<div class="flex items-center justify-center">
+<div class="flex items-center justify-center py-4">
   @if (this.uploadedFiles.Count > 0) 
   {
-    <div class="btn-group">
+    <div class="flex flex-wrap gap-2 content-start">
       @for (int i=0; i < this.uploadedFiles.Count; i++)
       {
         var j = i;
-        <button type="radio" name="files" class="btn @(Convert.ToBoolean(selectedFiles[j]) ? selectedColor : noneSelectedColor) gap-2" onclick="@(() => SelectFile(j))">
+        <button type="radio" name="files" class="btn @(Convert.ToBoolean(selectedFiles[j]) ? selectedColor : noneSelectedColor) gap-2 rounded-md flex-auto w-25" onclick="@(() => SelectFile(j))">
           <div class="badge badge-accent" onclick="@(() => DeleteFile(j))">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-4 h-4 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </div>
