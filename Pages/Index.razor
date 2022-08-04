@@ -1,4 +1,11 @@
 ﻿@page "/"
+@inject IJSRuntime JS
+@using System.IO
+@using ICSharpCode.SharpZipLib.Zip
+@using SixLabors.ImageSharp
+@using SixLabors.ImageSharp.Formats
+@using SixLabors.ImageSharp.Processing
+
 
 <PageTitle>IconCreator</PageTitle>
 
@@ -14,12 +21,12 @@
                     <button class="btn btn-primary w-full">Clear all</button>
                 </div>
                 <div class="col-end-7 col-span-2">
-                    <button class="btn btn-primary w-full">Download</button>
+                    <button class="btn btn-primary w-full" @onclick="OnDownload">Download</button>
                 </div>
             </div>
         </div>
         <div>
-            <IconSize.Components.IconSelecter />
+            <IconSize.Components.IconSelecter @ref="platformView"/>
         </div>
     </div>
 </div>
@@ -27,12 +34,82 @@
 
 @code{
     string Message = "No uploaded files";
+    long maxAllowedSize = 10000000;
     IconSize.Components.FileViewer fileView;
-
+    IconSize.Components.IconSelecter platformView;
     private void OnInputFileChange(InputFileChangeEventArgs e)
     {
         fileView.AddUploadFile(e.GetMultipleFiles());
         Message = $"Files uploaded";
         this.StateHasChanged();
+    }
+
+    private void SavePngToZip(ZipOutputStream zipFile, string entryPath, Image image)
+    {
+        @* IImageFormat format = new ImageFormatManager().FindFormatByMimeType("image/png"); *@
+        @* IImageEncoder encoder = new *@
+        zipFile.SetLevel(5);
+        using (MemoryStream tempstream = new MemoryStream())
+        {
+            image.SaveAsPng(tempstream);  
+            tempstream.Seek(0, SeekOrigin.Begin);
+            byte[] imageData = new byte[tempstream.Length];
+            tempstream.Read(imageData, 0, imageData.Length);
+
+
+            ZipEntry entry = new ZipEntry(entryPath);
+            entry.DateTime = DateTime.Now;
+            zipFile.PutNextEntry(entry);
+            zipFile.Write(imageData, 0, imageData.Length);
+            zipFile.CloseEntry();
+        }
+    }
+
+    private async Task OnDownload()
+    {   
+        IBrowserFile selectedFile = fileView.GetSelected();
+
+        if (selectedFile != null)
+        {
+            List<bool> selectedPlatform = platformView.GetPlatforms();
+            string outputName = "AppIcons.zip";
+
+
+            Image image = await Image.LoadAsync(selectedFile.OpenReadStream(maxAllowedSize));
+            var outputStream = new MemoryStream();
+
+             
+            using (ZipOutputStream zipFile = new ZipOutputStream(outputStream))
+            {
+                @* if (selectedPlatform[0] | selectedPlatform[1] | selectedPlatform[2] | selectedPlatform[3])
+                {
+                    // add main iphone
+                    SavePngToZip(zipFile, "appstore.png", image);
+
+                } *@
+                if (selectedPlatform[4])
+                {
+                    // add main android
+                    var mainSizes = new OutputSettings().mainSizes[1];
+                    var imageCopyMain = image;
+                    imageCopyMain.Mutate(x => x.Resize((int) mainSizes.HW * mainSizes.DpiName, (int) mainSizes.HW * mainSizes.DpiName));
+                    SavePngToZip(zipFile, "playstore.png", imageCopyMain);
+
+
+                    @* var sizes = new OutputSettings().androidSizes;
+                    foreach (var size in sizes)
+                    {
+                        var imageCopy = image;
+                        imageCopy.Mutate(x => x.Resize((int) size.HW * size.DpiName, (int) size.HW * size.DpiName));
+                        SavePngToZip(zipFile, $"Android/{size.HW * size.DpiName}.png", imageCopy);
+                    } *@
+                }
+                zipFile.Finish();
+                @* zipFile.Close(); *@
+                using var outputStreamRef = new DotNetStreamReference(stream: outputStream);
+
+                await JS.InvokeVoidAsync("downloadFileFromStream", outputName, outputStreamRef);
+            }
+        }
     }
 }

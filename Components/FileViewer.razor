@@ -35,6 +35,11 @@
         file = uploadFile;
         FileName = file.Name;
     }
+
+    public IBrowserFile File()
+    {
+      return file;
+    }
   }
 
   List<UpFile> uploadedFiles = new List<UpFile>();  
@@ -89,15 +94,15 @@
     this.StateHasChanged();
   }
 
-  public int GetSelected()
+  public IBrowserFile? GetSelected()
   {
     for (var i=0; i < selectedFiles.Count; i++)
     {
       if (selectedFiles[i] == 1)
       {
-        return i;
+        return uploadedFiles[i].File();
       }
     }
-    return -1;
+    return null;
   }
 }

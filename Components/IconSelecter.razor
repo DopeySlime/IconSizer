@@ -39,4 +39,9 @@
     {   
         selectIcons[platformId] = Convert.ToBoolean(args.Value);
     }
+
+    public List<bool> GetPlatforms()
+    {
+        return selectIcons;
+    }
 }
