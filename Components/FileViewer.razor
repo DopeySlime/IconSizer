@@ -94,6 +94,13 @@
     this.StateHasChanged();
   }
 
+  public void Clear()
+  {
+    uploadedFiles.Clear();
+    selectedFiles.Clear();
+    this.StateHasChanged();
+  }
+
   public IBrowserFile? GetSelected()
   {
     for (var i=0; i < selectedFiles.Count; i++)

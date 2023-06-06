@@ -7,11 +7,15 @@
                 Drag file to change size 
             </span>
         </span>
+
+        @{
+            System.Diagnostics.Debug.Assert(InputEvent != null, nameof(InputEvent) + " != null");
+        }
         <InputFile OnChange="InputEvent" class="hidden w-full h-full"/>
     </label>
 </div>
 
 @code {
     [Parameter]
-    public Action<InputFileChangeEventArgs> InputEvent { get; set; }
+    public Action<InputFileChangeEventArgs>? InputEvent { get; set; }
 }

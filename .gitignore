@@ -1,4 +1,6 @@
 bin
 .vscode
 obj
-Pages/deleted.txt
+out
+.idea
+/build

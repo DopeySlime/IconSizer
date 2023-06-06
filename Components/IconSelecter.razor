@@ -34,13 +34,13 @@
 
 
 @code {
-    List<bool> selectIcons = new List<bool>{true, true, true, true, true};
+    List<bool>? selectIcons = new List<bool>{true, true, true, true, true};
     private void SelectPlatform(int platformId, ChangeEventArgs args)
-    {   
-        selectIcons[platformId] = Convert.ToBoolean(args.Value);
+    {
+        if (selectIcons != null) selectIcons[platformId] = Convert.ToBoolean(args.Value);
     }
 
-    public List<bool> GetPlatforms()
+    public List<bool>? GetPlatforms()
     {
         return selectIcons;
     }

@@ -1,5 +1,7 @@
-namespace Data.SizeSetting{
-    class Size
+using System.Diagnostics;
+
+namespace IconSize.Data{
+    public class Size
     {
         public double HW {get; set;}
         public int DpiName {get; set;}
@@ -17,7 +19,7 @@ namespace Data.SizeSetting{
     }
     class OutputSettings
     {
-        public List<Size> iphoneSizes = new List<Size>()
+        private static readonly List<Size> IphoneSizes = new List<Size>()
         {
             new Size(60, 3, "iphone"),
             new Size(40, 2, "iphone"),
@@ -31,7 +33,7 @@ namespace Data.SizeSetting{
             new Size(20, 3, "iphone"),
         };
 
-        public List<Size> ipadSizes = new List<Size>()
+        private static readonly List<Size> IpadSizes = new List<Size>()
         {
             new Size(40, 2, "ipad"),
             new Size(72, 1, "ipad"),
@@ -47,7 +49,7 @@ namespace Data.SizeSetting{
             new Size(20, 2, "ipad"),
         };
 
-        public List<Size> watchSizes = new List<Size>()
+        private static readonly List<Size> WatchSizes = new List<Size>()
         {
             new Size(86, 2, "watch", "quickLook", "38mm"),
             new Size(40, 2, "watch", "appLauncher", "38mm"),
@@ -62,7 +64,7 @@ namespace Data.SizeSetting{
             new Size(1024, 1, "watch-marketing"),
         };
 
-        public List<Size> macSizes = new List<Size>()
+        private static readonly List<Size> MacSizes = new List<Size>()
         {
             new Size(128, 1, "mac"),
             new Size(256, 1, "mac"),
@@ -76,7 +78,7 @@ namespace Data.SizeSetting{
             new Size(512, 2, "mac"),
         };
 
-        public List<Size> androidSizes = new List<Size>()
+        private static readonly List<Size> AndroidSizes = new List<Size>()
         {
             new Size(48, 1, "android"),
             new Size(72, 1, "android"),
@@ -85,11 +87,42 @@ namespace Data.SizeSetting{
             new Size(192, 1, "android"),
         };
 
-        public List<Size> mainSizes = new List<Size>()
+        private static readonly List<Size> MainSizes = new List<Size>()
         {
             new Size(1024, 1, "ios-marketing"),
             new Size(512, 1, "android-marketing"),
         };
 
+        private static readonly List<List<Size>> AllSizes = new List<List<Size>>()
+        {
+            IphoneSizes,
+            IpadSizes,
+            WatchSizes,
+            MacSizes,
+            AndroidSizes,
+        };
+
+        public static List<Size> SelectedSizes(List<bool>? selectedIdx)
+        {
+            List<Size> resultSizes = new List<Size>();
+            // Debug.WriteLine(selectedIdx.Count);
+            // Debug.WriteLine(AllSizes.Count);
+            for (int i = 0; i < AllSizes.Count; i++)
+            {
+                if (selectedIdx != null && selectedIdx[i])
+                {
+                    foreach (var size in AllSizes[i])
+                    {
+                        resultSizes.Add(size);
+                    }
+                }
+            }
+
+            foreach (var size in MainSizes)
+            {
+                resultSizes.Add(size);
+            }
+            return resultSizes;
+        }
     }
 }
