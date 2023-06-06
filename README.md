@@ -75,9 +75,9 @@ Alternatively, you can run IconSizer using Docker:
 
 2. Specify the desired dimensions for the resized images.
 
-3. Click on the "Resize" button to initiate the resizing process.
+3. Select one of uploaded files wich you want to use as reference.
 
-4. Once the resizing is complete, click on the "Download ZIP" button to download a ZIP file containing the resized images.
+4. Click on the "Download" button to download a ZIP file containing the resized icons.
 
 ## License
 
